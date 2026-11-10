@@ -1,4 +1,5 @@
 using System.IO;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEditor.SceneManagement;
@@ -64,7 +65,71 @@ namespace Momo.Editor
         [MenuItem("Momo/Build WebGL Prototype")]
         public static void BuildWebGL()
         {
-            Prepare();Build(BuildTarget.WebGL,"Builds/WebGL");
+            Prepare();
+            // EdgeOne rejects individual files above 25 MiB. Ship a production
+            // WebGL player with Brotli and omit the browser's pending cat assets.
+            PlayerSettings.WebGL.compressionFormat=WebGLCompressionFormat.Brotli;
+            PlayerSettings.WebGL.decompressionFallback=true;
+            ReimportWebGlShowcaseTextures();
+            var stashed=StageWebGlPendingCatAssets();
+            try { Build(BuildTarget.WebGL,"Builds/WebGL",BuildOptions.None); }
+            finally { RestoreWebGlPendingCatAssets(stashed); }
+        }
+
+        static readonly string[] WebGlPendingCatFolders =
+        {
+            "Assets/Momo/Resources/ImportedCat",
+            "Assets/Momo/Resources/ImportedCats/Ragdoll",
+            "Assets/Momo/Resources/ImportedCats/White",
+            "Assets/Momo/Resources/ImportedCats/Black"
+        };
+        const string WebGlStagingRoot="Assets/Momo/WebGLBuildStaging";
+        static readonly string[] WebGlShowcaseTextureFolders =
+        {
+            "Assets/Momo/Resources/ImportedCats/BritishBlue",
+            "Assets/Momo/Resources/ImportedCats/Calico"
+        };
+
+        static void ReimportWebGlShowcaseTextures()
+        {
+            foreach(string folder in WebGlShowcaseTextureFolders)
+            foreach(string guid in AssetDatabase.FindAssets("t:Texture2D",new[]{folder}))
+            {
+                var importer=AssetImporter.GetAtPath(AssetDatabase.GUIDToAssetPath(guid)) as TextureImporter;
+                if(importer==null)continue;
+                var webgl=importer.GetPlatformTextureSettings("WebGL");
+                if(webgl.overridden&&webgl.maxTextureSize==1024&&webgl.format==TextureImporterFormat.ETC2_RGBA8&&webgl.compressionQuality==50)continue;
+                webgl.name="WebGL";webgl.overridden=true;webgl.maxTextureSize=1024;
+                webgl.format=TextureImporterFormat.ETC2_RGBA8;webgl.compressionQuality=50;
+                importer.SetPlatformTextureSettings(webgl);importer.SaveAndReimport();
+            }
+        }
+
+        static List<string> StageWebGlPendingCatAssets()
+        {
+            if(!AssetDatabase.IsValidFolder(WebGlStagingRoot))AssetDatabase.CreateFolder("Assets/Momo","WebGLBuildStaging");
+            var staged=new List<string>();
+            foreach(string source in WebGlPendingCatFolders)
+            {
+                if(!AssetDatabase.IsValidFolder(source))continue;
+                string destination=WebGlStagingRoot+"/"+Path.GetFileName(source);
+                string error=AssetDatabase.MoveAsset(source,destination);
+                if(!string.IsNullOrEmpty(error))throw new System.Exception("Could not exclude pending WebGL asset: "+error);
+                staged.Add(source);
+            }
+            AssetDatabase.SaveAssets();AssetDatabase.Refresh();
+            return staged;
+        }
+        static void RestoreWebGlPendingCatAssets(List<string> staged)
+        {
+            for(int i=staged.Count-1;i>=0;i--)
+            {
+                string source=staged[i];
+                string stagedPath=WebGlStagingRoot+"/"+Path.GetFileName(source);
+                string error=AssetDatabase.MoveAsset(stagedPath,source);
+                if(!string.IsNullOrEmpty(error))Debug.LogError("Could not restore pending WebGL asset: "+error);
+            }
+            AssetDatabase.DeleteAsset(WebGlStagingRoot);AssetDatabase.SaveAssets();AssetDatabase.Refresh();
         }
         [MenuItem("Momo/Export iOS Device Xcode Project")]
         public static void BuildIOS()
@@ -86,11 +151,11 @@ namespace Momo.Editor
             Prepare();PlayerSettings.SetScriptingBackend(UnityEditor.Build.NamedBuildTarget.iOS,ScriptingImplementation.IL2CPP);
             PlayerSettings.iOS.sdkVersion=iOSSdkVersion.DeviceSDK;Build(BuildTarget.iOS,"Builds/iOS-Window");
         }
-        static void Build(BuildTarget target,string path)
+        static void Build(BuildTarget target,string path,BuildOptions options=BuildOptions.Development)
         {
             WindowViewChecks.Run();
             Directory.CreateDirectory(Path.GetDirectoryName(path));
-            var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{"Assets/Momo/Scenes/PetHome.unity"},locationPathName=path,target=target,options=BuildOptions.Development});
+            var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions{scenes=new[]{"Assets/Momo/Scenes/PetHome.unity"},locationPathName=path,target=target,options=options});
             if(report.summary.result!=BuildResult.Succeeded)throw new System.Exception("Momo build failed: "+report.summary.result);
             if(target==BuildTarget.iOS)
             {
