@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework><EnableDefaultCompileItems>false</EnableDefaultCompileItems><Nullable>disable</Nullable>
+    <UnityHome Condition="'$(UnityHome)'==''">/Applications/Unity/Hub/Editor/6000.3.23f1/Unity.app/Contents</UnityHome>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../Assets/Momo/Core/*.cs"/><Compile Include="../Assets/Momo/Runtime/*.cs"/><Compile Include="../Assets/Momo/Editor/*.cs"/>
+    <Reference Include="$(UnityHome)/Resources/Scripting/Managed/UnityEngine/*.dll"/>
+    <Reference Include="../Library/ScriptAssemblies/UnityEngine.UI.dll"/>
+    <Reference Include="../Library/ScriptAssemblies/Unity.TextMeshPro.dll"/>
+    <Reference Include="../Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll"/>
+    <Reference Include="$(UnityHome)/Resources/BuildPipeline/UnityEditor.iOS.Extensions.Xcode.dll"/>
+  </ItemGroup>
+</Project>

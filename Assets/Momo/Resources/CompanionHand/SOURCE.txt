@@ -1,0 +1,16 @@
+Source: fps arms (rigged only)
+Author: para; base mesh and skin texture from MakeHuman team.
+Author page: https://opengameart.org/content/fps-arms-rigged-only
+Download: https://opengameart.org/sites/default/files/fps%20arms.7z
+Retrieved: 2026-10-23 (Asia/Shanghai)
+Licence: CC0 1.0 Universal
+https://creativecommons.org/publicdomain/zero/1.0/
+The author page explicitly labels this asset CC0 and credits MakeHuman.
+
+Adaptations for Momo:
+Right hand, forearm and upper arm extracted; original FPS control rig/animation discarded.
+One subdivision level, normalized dimensions, 25-bone deform hierarchy,
+four weights per vertex. Original 1024px diffuse UV texture retained.
+Left and right prefabs are baked separately with corrected normals, winding and bind poses. No runtime negative scale. Runtime authors food-offer/finger-curl
+and petting poses; not motion capture. Model is not claimed to be newly authored.
+Reproduction script: scripts/model-tools/prepare_hands.py

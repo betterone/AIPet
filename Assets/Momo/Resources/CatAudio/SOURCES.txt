@@ -1,0 +1,34 @@
+CatAudio — real recordings, not human imitation or synthesized meows.
+
+Invite1/2, Peek1/2, Found1/2
+Source: Kitten meows by Luke100000, 2019-07-16
+https://freesound.org/people/Luke100000/sounds/476918/
+Author description: My 8 weeks young kitten trying to get attention.
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Downloaded high quality preview: https://cdn.freesound.org/previews/476/476918_3211895-hq.mp3
+Cuts (seconds): 0.40+1.32, 9.10+1.43, 2.03+0.64, 7.92+0.64, 4.90+0.52, 6.00+0.57.
+
+Purr1/2
+Source: loud_cat_purring.wav by the_semen_incident, 2012-05-14
+https://freesound.org/people/the_semen_incident/sounds/155651/
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Downloaded high quality preview: https://cdn.freesound.org/previews/155/155651_60744-hq.mp3
+Cuts (seconds): 1.0+2.5, 4.0+2.5.
+
+Adaptations: cropped, filtered, loudness normalized, faded, mono 22050 Hz PCM WAV.
+No voice generation, pitch shift or paid runtime service. Retrieved 2026-10-20.
+CatAudio/SOURCES is also bundled as a readable TextAsset for the in-app sound credits.
+
+Per-cat regular meows added 2026-10-22, supplied by the user as local MP3 files.
+Copied byte-for-byte, with no cropping, pitch shift or re-encoding:
+Breed 0 / Mikan / MeowMikan.mp3 <- u_r9sp2mg8xc-meow-433426.mp3
+Breed 1 / Earl / MeowEarl.mp3 <- yodguard-cute-soft-cat-meow-4-535483.mp3
+Breed 2 / Chai / MeowChai.mp3 <- sound_garage-cat-meow-12-fx-306191.mp3
+Breed 3 / Oreo / MeowOreo.mp3 <- lazychillzone-cat-meow-loud-225307.mp3
+Breed 4 / Yuki / MeowYuki.mp3 <- sound_garage-cat-meow-1-fx-306178.mp3
+Original locations: /Users/zak/Downloads/<filename>.
+Creator labels above are taken from the supplied filenames. No source page or
+license document was supplied for these five files; the CC0 attribution above
+applies only to the two original recordings, not to these added MP3s.
+Invite, Peek and Found use the selected cat's regular meow. Purr is unchanged.
+Breeds 5-8 continue using the original alternating Invite/Peek/Found clips.

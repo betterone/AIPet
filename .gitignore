@@ -1,0 +1,16 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+UserSettings/
+Builds/
+.tools/
+.DS_Store
+*.csproj.user
+*.sln
+*.slnx
+tests/bin/
+tests/obj/
+artifacts/*.log
+artifacts/*.xml
+artifacts/
