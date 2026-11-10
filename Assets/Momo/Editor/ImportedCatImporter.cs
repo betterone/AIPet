@@ -41,6 +41,13 @@ namespace Momo.Editor
             ios.name = "iPhone"; ios.overridden = true; ios.maxTextureSize = 2048;
             ios.format = TextureImporterFormat.ASTC_6x6; ios.compressionQuality = 80;
             importer.SetPlatformTextureSettings(ios);
+            // EdgeOne Pages limits a published file to 25 MiB. The web showcase
+            // has two close-up cats, so 1K compressed maps preserve the silhouette
+            // and coat while keeping its single WebGL data package deployable.
+            var webgl = importer.GetPlatformTextureSettings("WebGL");
+            webgl.name = "WebGL"; webgl.overridden = true; webgl.maxTextureSize = 1024;
+            webgl.format = TextureImporterFormat.ETC2_RGBA8; webgl.compressionQuality = 50;
+            importer.SetPlatformTextureSettings(webgl);
         }
         [MenuItem("Momo/Prepare Imported Cat")]
         public static void Prepare()

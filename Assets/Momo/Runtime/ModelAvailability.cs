@@ -36,7 +36,16 @@ namespace Momo
         { return IsVisibleInBoutique(breed) && !IsPendingInBoutique(breed); }
 
         public static bool CanUseImportedAppearance(int breed)
-        { return IsVisibleInBoutique(breed); }
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            // Pending web cards deliberately have no imported assets in the first
+            // browser release. Existing saves retain their breed but fall back to
+            // the procedural appearance instead of downloading unavailable art.
+            return IsTodayModel(breed);
+#else
+            return IsVisibleInBoutique(breed);
+#endif
+        }
 
         public static bool WebShowcase
         {
