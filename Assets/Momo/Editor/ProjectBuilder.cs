@@ -72,7 +72,11 @@ namespace Momo.Editor
             PlayerSettings.WebGL.decompressionFallback=true;
             ReimportWebGlShowcaseTextures();
             var stashed=StageWebGlPendingCatAssets();
-            try { Build(BuildTarget.WebGL,"Builds/WebGL",BuildOptions.None); }
+            const string webGlOutput="Builds/WebGL";
+            // Unity preserves obsolete files when a build changes compression mode.
+            // A stale loader would keep requesting the old, oversized data package.
+            if(Directory.Exists(webGlOutput))Directory.Delete(webGlOutput,true);
+            try { Build(BuildTarget.WebGL,webGlOutput,BuildOptions.None); }
             finally { RestoreWebGlPendingCatAssets(stashed); }
         }
 
